@@ -1,5 +1,10 @@
-def main():
-    print("IA CI Teste Selector")
+from ai.gemini_client import perguntar_gemini
 
-if __name__ == "__name__":
+
+def main():
+    resposta = perguntar_gemini("Olá, Gemini!")
+    print(resposta)
+
+
+if __name__ == "__main__":
     main()
