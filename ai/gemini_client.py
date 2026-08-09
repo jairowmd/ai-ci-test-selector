@@ -1,16 +1,17 @@
-import os
-import requests
+import os # os → permite acessar coisas do sistema operacional
+import requests # requests → biblioteca que usamos para fazer requisições HTTP.
 
 
-GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent"
 
 
 def perguntar_gemini(pergunta):
     api_key = os.getenv("GEMINI_API_KEY")
 
     headers = {
-        "Content-Type": "application/json"
-        }
+        "Content-Type": "application/json",
+        "x-goog-api-key": api_key
+    }
 
     dados = {
         "contents": [
@@ -27,12 +28,13 @@ def perguntar_gemini(pergunta):
     response = requests.post(
         GEMINI_URL,
         headers=headers,
-        params={"key": api_key},
         json=dados
     )
 
-    print(response.status_code)
-    print(response.text)
+    
+    dados_resposta = response.json()
+    resposta = dados_resposta["candidates"][0]["content"]["parts"][0]["text"]
+    return resposta
 
 
 def main():
