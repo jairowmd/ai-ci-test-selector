@@ -1,8 +1,9 @@
-# "canivete" de Git/pytest.
 # Funções utilitárias para Git e pytest
 
 import subprocess
 import sys
+import os
+
 
 
 def obter_status_git():
@@ -43,13 +44,16 @@ def obter_testes_disponiveis():
     linhas = resultado.stdout.splitlines()
 
 def obter_arquivos_alterados_no_commit():
+    commit_anterior = os.getenv("GIT_BEFORE")
+    commit_atual = os.getenv("GIT_AFTER")
+
     resultado = subprocess.run(
         [
             "git",
             "diff",
             "--name-only",
-            "HEAD~1",
-            "HEAD"
+            commit_anterior,
+            commit_atual
         ],
         capture_output=True,
         text=True
