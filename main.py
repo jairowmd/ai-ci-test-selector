@@ -3,17 +3,18 @@
 import json
 
 from git.git_utils import (
-    obter_arquivos_alterados,
     obter_testes_disponiveis,
-    executar_testes
+    executar_testes,
+    obter_arquivos_alterados_no_commit
 )
 
 from ai.gemini_client import perguntar_gemini
 
 
 def main():
-    arquivos = obter_arquivos_alterados()
+    arquivos = obter_arquivos_alterados_no_commit()
     testes = obter_testes_disponiveis()
+    print("ARQUIVOS:", arquivos)
 
     pergunta = f"""
 Você é um especialista em testes de software.
@@ -46,20 +47,11 @@ Não invente testes que não estejam na lista de testes disponíveis.
 
     testes_selecionados = dados["testes"]
 
-    expressao_pytest = " or ".join(testes_selecionados)
-
-    print(expressao_pytest)
-
     print(testes_selecionados)
-
-    dados = json.loads(resposta)
-
-    testes_selecionados = dados["testes"]
 
     resultado_testes = executar_testes(testes_selecionados)
 
     print(resultado_testes)
-
 
 
 if __name__ == "__main__":

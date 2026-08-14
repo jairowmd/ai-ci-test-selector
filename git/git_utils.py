@@ -1,4 +1,5 @@
 # "canivete" de Git/pytest.
+# Funções utilitárias para Git e pytest
 
 import subprocess
 import sys
@@ -40,6 +41,21 @@ def obter_testes_disponiveis():
     )
 
     linhas = resultado.stdout.splitlines()
+
+def obter_arquivos_alterados_no_commit():
+    resultado = subprocess.run(
+        [
+            "git",
+            "diff",
+            "--name-only",
+            "HEAD~1",
+            "HEAD"
+        ],
+        capture_output=True,
+        text=True
+    )
+
+    return resultado.stdout.splitlines()
 
     testes = []
 
