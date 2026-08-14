@@ -43,6 +43,18 @@ def obter_testes_disponiveis():
 
     linhas = resultado.stdout.splitlines()
 
+    testes = []
+
+    for linha in linhas:
+        if "<Function" in linha:
+            nome_teste = linha.strip()
+            nome_teste = nome_teste.replace("<Function ", "")
+            nome_teste = nome_teste.replace(">", "")
+
+            testes.append(nome_teste)
+
+    return testes
+
 def obter_arquivos_alterados_no_commit():
     commit_anterior = os.getenv("GIT_BEFORE")
     commit_atual = os.getenv("GIT_AFTER")

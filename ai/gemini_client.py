@@ -1,3 +1,5 @@
+# Responsabilidade: Conversar com o Gemini.
+
 import os # os → permite acessar coisas do sistema operacional
 import requests # requests → biblioteca que usamos para fazer requisições HTTP.
 
@@ -28,17 +30,14 @@ def perguntar_gemini(pergunta):
     response = requests.post(
         GEMINI_URL,
         headers=headers,
-        json=dados
+        json=dados,
+        timeout=60
     )
 
     
     dados_resposta = response.json()
     resposta = dados_resposta["candidates"][0]["content"]["parts"][0]["text"]
     return resposta
-
-
-def main():
-    perguntar_gemini("Olá, Gemini!")
 
 
 if __name__ == "__main__":
