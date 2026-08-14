@@ -1,4 +1,4 @@
-# Funções utilitárias para Git e pytest
+# Funções utilitárias para Git, pytest e seleção de testes
 
 import subprocess
 import sys
@@ -58,6 +58,9 @@ def obter_testes_disponiveis():
 def obter_arquivos_alterados_no_commit():
     commit_anterior = os.getenv("GIT_BEFORE")
     commit_atual = os.getenv("GIT_AFTER")
+
+    if commit_anterior == "0000000000000000000000000000000000000000":
+        commit_anterior = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 
     resultado = subprocess.run(
         [
