@@ -1,4 +1,4 @@
-# Funções utilitárias para Git, pytest e seleção de testes
+# Funções utilitárias para Git, pytest e seleção de teste
 
 import subprocess
 import sys
