@@ -34,11 +34,13 @@ def perguntar_gemini(pergunta):
         timeout=60
     )
 
-    
-    dados_resposta = response.json()
-    resposta = dados_resposta["candidates"][0]["content"]["parts"][0]["text"]
-    return resposta
+    response.raise_for_status()
 
+    dados_resposta = response.json()
+
+    resposta = dados_resposta["candidates"][0]["content"]["parts"][0]["text"]
+
+    return resposta
 
 if __name__ == "__main__":
     main()

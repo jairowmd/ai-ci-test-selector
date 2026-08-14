@@ -69,6 +69,18 @@ Considere também o módulo que o teste importa e as funções que ele testa.
 
         return
 
+    testes_invalidos = [
+        teste
+        for teste in testes_selecionados
+        if teste not in testes
+    ]
+
+    if testes_invalidos:
+        raise ValueError(
+        f"Gemini retornou testes inexistentes: {testes_invalidos}"
+        )
+
+
     resultado_testes = executar_testes(testes_selecionados)
 
     print(resultado_testes)
