@@ -1,16 +1,21 @@
-# O subprocess é um módulo nativo da biblioteca padrão do Python que serve para executar e interagir com programas externos, comandos do sistema operacional ou scripts
-import subprocess
+# "canivete" de Git/pytest.
 
-def obter_arquivos_alterados():
+import subprocess
+import sys
+
+
+def obter_status_git():
     resultado = subprocess.run(
         ["git", "status", "--short"],
-        # "Python, capture a saída do comando em vez de simplesmente jogar na tela."
         capture_output=True,
-        # "Quero receber essa saída como texto."
         text=True
     )
 
-    linhas = resultado.stdout.splitlines()
+    return resultado.stdout
+
+
+def extrair_arquivos_alterados(status):
+    linhas = status.splitlines()
 
     arquivos = []
 
@@ -18,5 +23,50 @@ def obter_arquivos_alterados():
         arquivo = linha[3:]
         arquivos.append(arquivo)
 
-
     return arquivos
+
+
+def obter_arquivos_alterados():
+    status = obter_status_git()
+
+    return extrair_arquivos_alterados(status)
+
+
+def obter_testes_disponiveis():
+    resultado = subprocess.run(
+        [sys.executable, "-m", "pytest", "--collect-only"],
+        capture_output=True,
+        text=True
+    )
+
+    linhas = resultado.stdout.splitlines()
+
+    testes = []
+
+    for linha in linhas:
+        if "<Function" in linha:
+            nome_teste = linha.strip()
+            nome_teste = nome_teste.replace("<Function ", "")
+            nome_teste = nome_teste.replace(">", "")
+
+            testes.append(nome_teste)
+
+    return testes
+
+
+def executar_testes(testes):
+    expressao_pytest = " or ".join(testes)
+
+    resultado = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "-k",
+            expressao_pytest
+        ],
+        capture_output=True,
+        text=True
+    )
+
+    return resultado.stdout
