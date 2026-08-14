@@ -20,5 +20,9 @@ jobs:
         - name: Instalar dependências
           run: pip install -r requirements.txt
           
-        - name: Executar testes
-          run: python -m pytest
+        - name: Executar seletor de testes com IA
+          run: python main.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GIT_BEFORE: ${{ github.event.before }}
+          GIT_AFTER: ${{ github.sha }}

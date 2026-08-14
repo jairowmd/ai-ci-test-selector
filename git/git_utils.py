@@ -1,7 +1,9 @@
-# "canivete" de Git/pytest.
+# Funções utilitárias para Git, pytest e seleção de teste
 
 import subprocess
 import sys
+import os
+
 
 
 def obter_status_git():
@@ -40,6 +42,39 @@ def obter_testes_disponiveis():
     )
 
     linhas = resultado.stdout.splitlines()
+
+    testes = []
+
+    for linha in linhas:
+        if "<Function" in linha:
+            nome_teste = linha.strip()
+            nome_teste = nome_teste.replace("<Function ", "")
+            nome_teste = nome_teste.replace(">", "")
+
+            testes.append(nome_teste)
+
+    return testes
+
+def obter_arquivos_alterados_no_commit():
+    commit_anterior = os.getenv("GIT_BEFORE")
+    commit_atual = os.getenv("GIT_AFTER")
+
+    if commit_anterior == "0000000000000000000000000000000000000000":
+        commit_anterior = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+
+    resultado = subprocess.run(
+        [
+            "git",
+            "diff",
+            "--name-only",
+            commit_anterior,
+            commit_atual
+        ],
+        capture_output=True,
+        text=True
+    )
+
+    return resultado.stdout.splitlines()
 
     testes = []
 
